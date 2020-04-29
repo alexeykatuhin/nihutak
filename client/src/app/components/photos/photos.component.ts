@@ -20,4 +20,11 @@ export class PhotosComponent {
            console.log(res)
         });
     }
+    getClass(photo){
+        return 'flag-icon flag-icon-'+photo.country.code;
+    }
+
+    onScroll(){
+        console.log("!!!scroll")
+    }
 }

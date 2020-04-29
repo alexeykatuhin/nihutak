@@ -28,6 +28,8 @@ namespace AuthTest.Data.Initialize
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
 
+            SeedCountries(context);
+            SeedCities(context);
             SeedTags(context);
             SeedPhotos(context);
 

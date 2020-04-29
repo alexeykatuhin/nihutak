@@ -13,8 +13,8 @@ namespace AuthTest.Data.Entities
         public string Url { get; set; }
         [MaxLength(500)]
         public string Description { get; set; }
-        public CountryEnum CountryId { get; set; }
-        public CityEnum CityId { get; set; }
+        public int CityId { get; set; }
+        public City City { get; set; }
         public IList<PhotoTag> PhotoTags { get; set; }
         public DateTime CreatedDt { get; set; }
 

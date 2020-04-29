@@ -1,4 +1,5 @@
-<div class="photos" *ngIf ="!loading">
+<div class="photos" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollContainer]="'.ant-layout'"
+[infiniteScrollThrottle]="50" (scrolled)="onScroll()" *ngIf ="!loading">
 <div  *ngFor="let photo of photos">
     
 <nz-card   nzHoverable style="width:240px" [nzCover]="coverTemplate">
@@ -12,7 +13,7 @@
     </div>
     <div class="desc">{{photo.description}}</div>
     <div class="date">{{photo.date}}</div>
-    <div class="geo"><span class="flag-icon flag-icon-gr flag-icon-squared"></span></div>
+    <div class="geo"><span [class]="getClass(photo)"></span><span>{{photo.city.name}}</span></div>
 </div>
   </ng-template>  
 </div>

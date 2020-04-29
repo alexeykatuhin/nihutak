@@ -31,6 +31,7 @@ import { PhotosComponent } from './components/photos/photos.component';
 import { PhotosService } from './_services/photos.service';
 import { environment } from '../environments/environment';
 import { AuthenticationService } from './_services';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 registerLocaleData(en);
 export function HttpLoaderFactory(http: HttpClient) {
@@ -70,6 +71,7 @@ export function provideConfig()
             }
         }),       
     SocialLoginModule.initialize(config),
+    InfiniteScrollModule
     ],
     declarations: [
         AppComponent,

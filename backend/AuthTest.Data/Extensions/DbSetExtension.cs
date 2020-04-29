@@ -10,7 +10,7 @@ namespace AuthTest.Data.Extensions
 {
     public static class DbSetExtension
     {
-        public static void AddOrUpdate<T>(this DbSet<T> dbSet,params T[] data) where T : class
+        public static void AddOrUpdate<T>(this DbSet<T> dbSet,  params T[] data) where T : class
         {
             foreach (var item in data)
             {

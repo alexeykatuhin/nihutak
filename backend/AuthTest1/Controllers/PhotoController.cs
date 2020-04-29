@@ -26,7 +26,7 @@ namespace AuthTest.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMany()
         {
-            var list = _context.Photos.Include(X=>X.PhotoTags).ThenInclude(x=>x.Tag);
+            var list = _context.Photos.Include(x=>x.City).ThenInclude(x=>x.Country).Include(X=>X.PhotoTags).ThenInclude(x=>x.Tag);
 
             var lstDto = list.Select(x => _mapper.Map<PhotoDto>(x)).ToList();
             return Ok(lstDto);

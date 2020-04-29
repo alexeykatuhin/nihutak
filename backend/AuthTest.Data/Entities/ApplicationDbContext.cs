@@ -27,6 +27,8 @@ namespace AuthTest.Data.Entities
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<PhotoTag> PhotoTags { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<City> Cities { get; set; }
 
 
 
