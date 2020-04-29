@@ -70,13 +70,12 @@ nz-header {
 }
 
 nz-content {
-  margin: 24px;
+  // margin: 24px;
 }
 
 .inner-content {
-  padding: 24px;
   background: #fff;
-  height: 100%;
+  margin-bottom: 24px;
 }
 
 
@@ -87,4 +86,11 @@ nz-content {
   font-size: 18px;
   font-weight: 400;
   z-index: 11;
+}
+
+.error-alert{
+  position: fixed;
+    right: 35px;
+    bottom: 35px;
+    width: 40vw;
 }

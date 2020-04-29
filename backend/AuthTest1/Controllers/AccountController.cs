@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -76,13 +77,29 @@ namespace AuthTest.API.Controllers
             if (result.Succeeded)
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(code);
+                var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+                var link = $"{_configuration["ClientUrl"]}/confirmemail?code={codeEncoded}&id={user.Id}"; 
                 await _emailService.SendEmailAsync(user.Email, "Confirm email",
-                    $"<a href='{_configuration["ClientUrl"]}/register/confirm?code={code}</a>&id={user.Id}'");
-                //await _signInManager.SignInAsync(user, false);
-                return Ok(/*await GenerateJwtToken(model.Email, user)*/);
+                    $"Для подтверждения эмайла перейди по <a href='{link}'>ссылке</a>.");
+                await _signInManager.SignInAsync(user, false);
+                return Ok(await GenerateJwtToken(model.Email, user));
             }
 
             throw new ApplicationException("UNKNOWN_ERROR");
+        }
+        
+        [HttpGet]
+        public async Task ConfirmEmail(string code, string userId)
+        {
+
+            var codeDecodedBytes = WebEncoders.Base64UrlDecode(code);
+            var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
+            var user = await _userManager.FindByIdAsync(userId);
+            var result = await _userManager.ConfirmEmailAsync(user, codeDecoded);
+
+            if (!result.Succeeded)
+                throw new ApplicationException("UNKNOWN_ERROR");
         }
 
         [HttpPost]
@@ -90,14 +107,14 @@ namespace AuthTest.API.Controllers
         {
             var user = new IdentityUser
             {
-                UserName = model.Email,
+                UserName = model.UserName,
                 Email = model.Email
             };
             var result = await _userManager.CreateAsync(user, model.Password);
-            await _userManager.AddToRoleAsync(user, Constants.UserRole);
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, Constants.UserRole);
                 await _signInManager.SignInAsync(user, false);
                 return Ok(await GenerateJwtToken(model.Email, user));
             }
@@ -117,7 +134,7 @@ namespace AuthTest.API.Controllers
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetUsers()
-        {            
+        {
             return Ok(_userManager.Users.Select(x=>_mapper.Map<UserInfoDto>(x)));
         }
 
@@ -143,34 +160,68 @@ namespace AuthTest.API.Controllers
                 signingCredentials: creds
             );
 
-            return new UserDto{ token = new JwtSecurityTokenHandler().WriteToken(token), username = user.UserName, isAdmin = isAdmin };
+            return new UserDto{ token = new JwtSecurityTokenHandler().WriteToken(token), username = user.UserName, isAdmin = isAdmin, email = email };
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetProviders()
-            =>
-            Ok((await _signInManager.GetExternalAuthenticationSchemesAsync()).Select(x => _mapper.Map<AuthProviderDto>(x)));
-
-        [HttpGet]
-        public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
+        [HttpPost]
+        public async Task<IActionResult> ExternalLogin([FromBody] ExternalLoginDto userDto)
         {
-            provider = "Google";
-            returnUrl = "";
-            var redirectUrl = $"{_configuration["ClientUrl"]}/ExternalLoginCallback?returnUrl={returnUrl}";
+            var user = await _userManager.FindByNameAsync(userDto.userName);
+            if (user == null)
+            {
+                user = new IdentityUser
+                {
+                    UserName = userDto.userName,
+                    Email = userDto.email,
+                    EmailConfirmed = true
+                };
+                var result = await _userManager.CreateAsync(user);
+                await _userManager.AddToRoleAsync(user, Constants.UserRole);
 
-            //var redirectUrl = $"http://localhost:50686/account/ExternalLoginCallback?returnUrl={returnUrl}";
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            var dd = new ChallengeResult(provider, properties);
-            return dd;
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, false);
+                    return Ok(await GenerateJwtToken(user.UserName, user));
+                }
+            }
+            else
+            {
+                await _signInManager.SignInAsync(user, false);
+                return Ok(await GenerateJwtToken(user.UserName, user));
+            }
+
+            throw new ApplicationException("UNKNOWN_ERROR");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordDto resetPasswordDto)
         {
-            var info = await _signInManager.GetExternalLoginInfoAsync();
+            var user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+
+            byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(code);
+            var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+            var link = $"{_configuration["ClientUrl"]}/resetconfirm?code={codeEncoded}&id={user.Id}";
+            await _emailService.SendEmailAsync(user.Email, "Reset Password",
+                $"Для сброса пароля перейди по <a href='{link}'>ссылке</a>.");
 
             return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordDto model)
+        {
+            var codeDecodedBytes = WebEncoders.Base64UrlDecode(model.Code);
+            var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var result = await _userManager.ResetPasswordAsync(user, codeDecoded, model.Password);
+            if (result.Succeeded)
+                return Ok(await GenerateJwtToken(user.UserName, user));
+
+
+            throw new ApplicationException("UNKNOWN_ERROR");
         }
 
     }

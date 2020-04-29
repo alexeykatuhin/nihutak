@@ -19,10 +19,18 @@ import en from '@angular/common/locales/en';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import {MultiTranslateHttpLoader} from "ngx-translate-multi-http-loader";
-import { ExternalLoginCallbackComponent } from './components/auth/external-login-callback/login-callback.component';
 
 import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
+import { ConfirmEmailComponent } from './components/auth/confirm-email/confirm-email.component';
+import { ResetConfirmComponent } from './components/auth/reset-confirm/reset-confirm.component';
+import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
+import { ErrorService } from './_services/error.service';
+import { ConfigModule } from 'ngx-envconfig';
+import { PhotosComponent } from './components/photos/photos.component';
+import { PhotosService } from './_services/photos.service';
+import { environment } from '../environments/environment';
+import { AuthenticationService } from './_services';
 
 registerLocaleData(en);
 export function HttpLoaderFactory(http: HttpClient) {
@@ -45,6 +53,7 @@ export function provideConfig()
 
 @NgModule({
     imports: [
+        ConfigModule.forRoot(environment),
         BrowserModule,
         ReactiveFormsModule,
         HttpClientModule,
@@ -60,14 +69,17 @@ export function provideConfig()
                 deps: [HttpClient]
             }
         }),       
-    SocialLoginModule.initialize(config)
+    SocialLoginModule.initialize(config),
     ],
     declarations: [
         AppComponent,
         HomeComponent,
         LoginComponent,
         RegisterComponent,
-        ExternalLoginCallbackComponent
+        ConfirmEmailComponent,
+        ResetConfirmComponent,
+        ResetPasswordComponent,
+        PhotosComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
@@ -76,7 +88,10 @@ export function provideConfig()
         {
             provide: AuthServiceConfig,
             useFactory: provideConfig
-          }
+          },
+          ErrorService,
+          PhotosService,
+          AuthenticationService
     ],
     bootstrap: [AppComponent]
 })

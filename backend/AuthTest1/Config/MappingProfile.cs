@@ -1,4 +1,6 @@
-﻿using AuthTest.Core.DTO.User;
+﻿using AuthTest.Core.DTO.Photo;
+using AuthTest.Core.DTO.User;
+using AuthTest.Data.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +21,10 @@ namespace AuthTest.API.Config
                 ;
 
             CreateMap<AuthenticationScheme, AuthProviderDto>();
+
+            CreateMap<Photo, PhotoDto>()
+                .ForMember(x => x.Tags, y => y.MapFrom(z => z.PhotoTags.Select(u => new TagDto { Id = u.TagId, Name = u.Tag.Name })))
+                .ForMember(x=>x.Date, y => y.MapFrom(z=>z.CreatedDt.ToShortDateString()));
         }
     }
 }

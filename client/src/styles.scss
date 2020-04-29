@@ -3,8 +3,35 @@
     float: right;
 }
 
-.ant-spin{
-    position: absolute;
-    left: 50%;
-    top:50%;
+.pull-left{
+    float: left;
+}
+
+.spinner>.ng-star-inserted{
+    height: 100%;
+    display: flex;
+    margin: auto;
+}
+
+.spinner{
+  
+    height: 100%;
+    .ant-spin{
+        margin: auto;
+    }
+}
+
+.photos{
+    .ant-card{
+        width: 100%!important;
+    }
+
+    .ant-tag{
+        font-size: 10px;
+        margin-bottom: 0.5vh;
+    }
+}
+
+.nz-content{
+    margin: 0;;
 }

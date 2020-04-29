@@ -6,6 +6,7 @@ import { AuthenticationService } from 'src/app/_services';
 import { AuthService } from 'angularx-social-login';
 import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
 
+declare var VK: any;
 
 @Component({ templateUrl: 'login.component.html', styleUrls : ['login.component.scss'] })
 export class LoginComponent implements OnInit {
@@ -29,7 +30,6 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-
             this.validateForm = this.fb.group({
                 username: [null, [Validators.required]],
                 password: [null, [Validators.required]]
@@ -38,9 +38,14 @@ export class LoginComponent implements OnInit {
             // get return url from route parameters or default to '/'
             this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
-            this.authService.authState.subscribe((user) => {
-                console.log(user)
-              }, (err)=> console.log('err'));
+        this.authService.authState.subscribe((user) => {
+            console.log(user)
+            if (user)
+                this.authenticationService.externalLogin(user.name, user.email)
+                    .subscribe(x => { this.router.navigate([this.returnUrl]) })
+        
+                }
+                , (err) => console.log('err'));
 
      
     }
@@ -77,10 +82,29 @@ export class LoginComponent implements OnInit {
       }
 
       externalAuth(platform: string){
-          console.log("!!!")
-        platform = GoogleLoginProvider.PROVIDER_ID;
-        //Sign In and get user Info using authService that we just injected
-        //    this.authService.signIn(platform)
+        this.loading = true;
+        switch (platform){
+            case "Google":
+                let p  = GoogleLoginProvider.PROVIDER_ID;
+                this.authService.signIn(p)
+                this.loading = false;
+                break;
+            case "Vk":
+                VK.Auth.login((res)=> {
+                    if (res && res.status == "connected" && res.session && res.session.user){
+                        this.authenticationService.externalLogin(`${res.session.user.first_name} ${res.session.user.last_name}`)
+                        .subscribe(x => {this.loading = false; this.router.navigate([this.returnUrl]);  })
+                    }})
+                break;
+
+        }
+        
+        return
+
+      
     }
+    resetPassword (){
+        console.log("!!!")
+        this.router.navigate(['/resetpassword']);}
 
 }

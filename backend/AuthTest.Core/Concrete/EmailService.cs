@@ -1,9 +1,10 @@
 ﻿using AuthTest.Core.Abstract;
-using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,29 +12,38 @@ namespace AuthTest.Core.Concrete
 {
     public class EmailService : IEmailService
     {
-        private const string smtpServer = "smtp.yandex.ru";
-        private const int smtpPort = 25;
-        private const string sendFrom = "alexeykatuhin@yandex.ru";
+        private const string smtpServer = "smtp.mail.ru";
+        private const int smtpPort = 587;
+        private const string sendFrom = "alexeykatuhin@mail.ru";
         private const string password = "Head4372!";
     
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-            var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("Администрация сайта", "login@nihutak.ru"));
-            emailMessage.To.Add(new MailboxAddress("", email));
-            emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            try
             {
-                Text = message
-            };
 
-            using (var client = new SmtpClient())
+                // отправитель - устанавливаем адрес и отображаемое в письме имя
+                MailAddress from = new MailAddress(sendFrom, "nihutak");
+                // кому отправляем
+                MailAddress to = new MailAddress(email);
+                // создаем объект сообщения
+                MailMessage m = new MailMessage(from, to);
+                // тема письма
+                m.Subject = subject;
+                // текст письма
+                m.Body = message;
+                // письмо представляет код html
+                m.IsBodyHtml = true;
+                // адрес smtp-сервера и порт, с которого будем отправлять письмо
+                SmtpClient smtp = new SmtpClient(smtpServer, smtpPort);
+                // логин и пароль
+                smtp.Credentials = new NetworkCredential(sendFrom, password);
+                smtp.EnableSsl = true;
+                smtp.Send(m);
+            }
+            catch (Exception)
             {
-                await client.ConnectAsync(smtpServer, smtpPort, false);
-                await client.AuthenticateAsync(sendFrom, password);
-                await client.SendAsync(emailMessage);
 
-                await client.DisconnectAsync(true);
             }
         }
     }

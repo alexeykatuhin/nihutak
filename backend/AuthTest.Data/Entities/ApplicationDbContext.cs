@@ -14,6 +14,21 @@ namespace AuthTest.Data.Entities
             optionsBuilder.UseMySql(GetConnectionString());
          
         }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<PhotoTag>().HasKey(sc => new { sc.PhotoId, sc.TagId });
+
+            builder.Entity<PhotoTag>().HasOne(p => p.Photo).WithMany(p => p.PhotoTags).HasForeignKey(x => x.PhotoId);
+            builder.Entity<PhotoTag>().HasOne(p => p.Tag).WithMany(p => p.PhotoTags).HasForeignKey(x => x.TagId);
+        }
+
+        public DbSet<Photo> Photos { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<PhotoTag> PhotoTags { get; set; }
+
+
 
         private static string GetConnectionString()
         {
@@ -28,17 +43,6 @@ namespace AuthTest.Data.Entities
                    $"pooling=true;";
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<IdentityRole>().HasData(
-        //        new IdentityRole
-        //        {
-        //            //Id = "1",
-        //            Name = "user"
 
-        //        }
-        //        );
-
-        //}
     }
 }

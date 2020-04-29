@@ -1,4 +1,6 @@
 ﻿using AuthTest.Core.Constants;
+using AuthTest.Data.Entities;
+using AuthTest.Data.Extensions;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -6,9 +8,9 @@ using System.Text;
 
 namespace AuthTest.Data.Initialize
 {
-    public static class IdentityDataInitializer
+    public static partial class DataInitializer
     {
-        public static void SeedData(RoleManager<IdentityRole> roleManager)
+        public static void SeedData(RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             if (!roleManager.RoleExistsAsync
   (Constants.UserRole).Result)
@@ -25,6 +27,11 @@ namespace AuthTest.Data.Initialize
                 role.Name = Constants.AdminRole;
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
+
+            SeedTags(context);
+            SeedPhotos(context);
+
+            context.SaveChanges();
         }
     }
 }

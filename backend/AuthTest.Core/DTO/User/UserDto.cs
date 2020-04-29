@@ -9,5 +9,7 @@ namespace AuthTest.Core.DTO.User
         public string username { get; set; }
         public string token { get; set; }
         public bool isAdmin { get; set; }
+        public string email { get; set; }
+
     }
 }

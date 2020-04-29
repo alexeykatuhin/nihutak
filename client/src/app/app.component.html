@@ -60,7 +60,7 @@
 
       </div>
     </nz-header>
-    <div class="pull-right user">
+    <!-- <div class="pull-right user">
 
 
       <div *ngIf="currentUser?.username">
@@ -68,10 +68,20 @@
               </div>
                <a title="{{ 'USER.LOGIN' | translate }}"><i *ngIf="!currentUser?.username"  nz-icon nzType="login" nzTheme="outline"></i></a>
       
-              </div>
+              </div> -->
     <nz-content>
       <div class="inner-content">
         <router-outlet></router-outlet>
+        <nz-alert
+        *ngIf="error"
+        class="error-alert"
+        nzType="error"
+        nzCloseable
+        nzMessage="Произошла ошибка"
+        [nzDescription]="error"
+        (nzOnClose)="afterClose()"
+      >
+      </nz-alert>
       </div>
     </nz-content>
   </nz-layout>

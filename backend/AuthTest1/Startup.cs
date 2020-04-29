@@ -91,17 +91,15 @@ namespace AuthTest1
             services.AddScoped<IEmailService, EmailService>();
 
             services.AddControllers();
-
+            services.Configure<IdentityOptions>(o => o.User.AllowedUserNameCharacters = string.Empty);
             //services.AddMvc(option => option.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext dbContext, RoleManager<IdentityRole> roleManager)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseExceptionHandler("/error");
+            app.UseStatusCodePages();
 
             app.UseCors(builder => { builder.AllowAnyOrigin(); builder.AllowAnyMethod(); builder.AllowAnyHeader(); });
 
@@ -124,7 +122,7 @@ namespace AuthTest1
             // ===== Create tables ======
             dbContext.Database.EnsureCreated();
 
-            IdentityDataInitializer.SeedData(roleManager);
+            DataInitializer.SeedData(roleManager, dbContext);
         }
     }
 }

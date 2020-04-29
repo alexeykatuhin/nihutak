@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/_services';
 
@@ -12,6 +12,7 @@ export class RegisterComponent implements OnInit {
     returnUrl: string;
     error = '';
     validateForm: FormGroup;
+    
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -27,7 +28,9 @@ export class RegisterComponent implements OnInit {
     ngOnInit() {
         this.validateForm = this.fb.group({
             username: [null, [Validators.required]],
-            password: [null, [Validators.required]]
+            password: [null, [Validators.required]],
+            email: [null, [Validators.email, Validators.required]],
+            checkPassword: [null, [Validators.required, this.confirmationValidator]]
           });
 
         // get return url from route parameters or default to '/'
@@ -52,10 +55,11 @@ export class RegisterComponent implements OnInit {
         }
 
         this.loading = true;
-        this.authenticationService.register(this.f.username.value, this.f.password.value)
+        this.authenticationService.register(this.f.email.value, this.f.password.value, this.f.username.value)
             .pipe(first())
             .subscribe(
                 data => {
+                    alert(`Письмо для подтверждения вашего адреса выслано на ${data.email}`)
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
@@ -64,4 +68,22 @@ export class RegisterComponent implements OnInit {
                     this.loading = false;
                 });
       }
+
+      updateConfirmValidator(): void {
+        /** wait for refresh value */
+        Promise.resolve().then(() => this.validateForm.controls.checkPassword.updateValueAndValidity());
+      }
+
+      confirmationValidator = (control: FormControl): { [s: string]: boolean } => {
+        if (!control.value) {
+          return { required: true };
+        } else if (control.value !== this.validateForm.controls.password.value) {
+          return { confirm: true, error: true };
+        }
+        var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+        if (!control.value.match(passw))
+        return { invalid: true}
+
+        return {};
+      };
 }
