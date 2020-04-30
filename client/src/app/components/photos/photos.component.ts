@@ -8,7 +8,9 @@ import { PhotosService } from 'src/app/_services/photos.service';
 @Component({ templateUrl: 'photos.component.html' , styleUrls : ['photos.component.scss'] })
 export class PhotosComponent {
     loading = true;
+    loadingMore = false
     photos;
+    page = 0;
 
     constructor(private photoService: PhotosService) { }
 
@@ -25,6 +27,13 @@ export class PhotosComponent {
     }
 
     onScroll(){
-        console.log("!!!scroll")
+        if(this.loadingMore)
+            return;
+        this.loadingMore = true;
+        this.page++;
+        this.photoService.getPhotos(this.page).pipe(first()).subscribe(res => {
+            this.loadingMore = false;
+            this.photos = this.photos.concat(res);
+        });
     }
 }

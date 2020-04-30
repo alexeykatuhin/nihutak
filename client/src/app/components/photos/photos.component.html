@@ -1,8 +1,8 @@
-<div class="photos" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollContainer]="'.ant-layout'"
+<div class="photos" infiniteScroll [infiniteScrollDistance]="2"
 [infiniteScrollThrottle]="50" (scrolled)="onScroll()" *ngIf ="!loading">
 <div  *ngFor="let photo of photos">
     
-<nz-card   nzHoverable style="width:240px" [nzCover]="coverTemplate">
+<nz-card   nzHoverable style="width:240px" [nzCover]="coverTemplate" >
     <!-- <nz-card-meta nzTitle="Europe Street beat" nzDescription="www.instagram.com">!!!</nz-card-meta> -->
   </nz-card>
   <ng-template #coverTemplate>
@@ -16,6 +16,12 @@
     <div class="geo"><span [class]="getClass(photo)"></span><span>{{photo.city.name}}</span></div>
 </div>
   </ng-template>  
+</div>
+
+<div *ngIf="loadingMore" class="fake">
+  <nz-card [nzLoading]="true">
+
+  </nz-card>
 </div>
 </div>
   <nz-spin class="spinner" *ngIf ="loading" nzSimple [nzSize]="'large'"></nz-spin>

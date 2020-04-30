@@ -1,3 +1,49 @@
+.logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
+.layout {
+  min-height: 100vh;
+}
+
+nz-sider {
+  overflow: auto;
+  height: 100%;
+  height: 100vh;
+  position: sticky;
+  top: 0px;
+  left: 0;
+}
+
+
+nz-header {
+  background: #fff;
+  padding: 0;
+}
+
+nz-content {
+  overflow: initial;
+}
+
+.inner-content {
+  text-align: center;
+  height: 100%;
+}
+
+nz-footer {
+  text-align: center;
+}
+
+.error-alert{
+  position: fixed;
+    right: 35px;
+    bottom: 35px;
+    width: 40vw;
+}
+
+
 :host {
   display: flex;
   text-rendering: optimizeLegibility;
@@ -5,29 +51,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.app-layout {
-  height: 100vh;
-}
-
 .menu-sidebar {
-  position: relative;
   z-index: 10;
   min-height: 100vh;
   box-shadow: 2px 0 6px rgba(0,21,41,.35);
 }
-
-.header-trigger {
-  height: 64px;
-  padding: 20px 24px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: all .3s,padding 0s;
-}
-
-.trigger:hover {
-  color: #1890ff;
-}
-
 .sidebar-logo {
   position: relative;
   height: 64px;
@@ -55,12 +83,6 @@
   vertical-align: middle;
 }
 
-nz-header {
-  padding: 0;
-  width: 100%;
-  z-index: 2;
-}
-
 .app-header {
   position: relative;
   height: 64px;
@@ -69,29 +91,15 @@ nz-header {
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 }
 
-nz-content {
-  // margin: 24px;
+.header-trigger {
+  height: 64px;
+  padding: 20px 24px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all .3s,padding 0s;
 }
 
-.inner-content {
-  background: #fff;
-  margin-bottom: 24px;
-  height: 100%;
+.trigger:hover {
+  color: #1890ff;
 }
 
-
-.user{
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 18px;
-  font-weight: 400;
-  z-index: 11;
-}
-
-.error-alert{
-  position: fixed;
-    right: 35px;
-    bottom: 35px;
-    width: 40vw;
-}

@@ -31,11 +31,16 @@
         margin-bottom: 0.5vh;
     }
     .ant-card-body {
-        padding: 1vh;
+        padding: 2vh;
         background: #f0f2f5;
     }
     .ant-card-cover{
         margin-bottom: 1.5vh;
+    }
+    .fake {
+        .ant-card-body{
+            background: white;
+        }
     }
 }
 
