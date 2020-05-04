@@ -28,6 +28,14 @@ namespace AuthTest.API.Config
                 .ForMember(x => x.City, y => y.MapFrom(z => new SimpleDto { Id = z.City.Id, Name = z.City.Name }))
                 .ForMember(x => x.Country, y => y.MapFrom(z => new CountryDto { Id = z.City.Country.Id, Name = z.City.Country.Name, Code = z.City.Country.Code }))
                 .ForMember(x=>x.Date, y => y.MapFrom(z=>z.CreatedDt.ToShortDateString()));
+
+            CreateMap<Tag, SimpleDto>();
+
+            CreateMap<Country, CoutryCitiesDto>()
+                .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
+                .ForMember(x => x.Name, y => y.MapFrom(z => z.Name))
+                .ForMember(x => x.Code, y => y.MapFrom(z => z.Code))
+                .ForMember(x => x.Cities, y => y.MapFrom(z => z.Cities.Select(i => new SimpleDto { Id = i.Id, Name = i.Name }).OrderBy(i=>i.Name).ToList()));
         }
     }
 }

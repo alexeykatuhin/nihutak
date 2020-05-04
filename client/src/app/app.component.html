@@ -8,32 +8,34 @@
             [nzTrigger]="null"
             [nzCollapsedWidth]="0">
     <div class="sidebar-logo">
-      <a href="https://ng.ant.design/" target="_blank">
+      <a  routerLink="/">
         <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
-        <h1>Ant Design Of Angular</h1>
+        <h1>Nihutak</h1>
       </a>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
+      <li nz-submenu nzOpen nzTitle="Фото" nzIcon="picture">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/welcome">Welcome</a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Monitor</a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Workplace</a>
+            <a routerLink="/">Лента</a>
           </li>
         </ul>
       </li>
-      <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
+      <li *ngIf="currentUser?.username"  nz-submenu nzOpen [nzTitle]="currentUser?.username" nzIcon="user">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a>Basic Form</a>
+            <a (click)=logout()>{{ 'USER.LOGOUT' | translate }}  </a>
           </li>
         </ul>
       </li>
+      <li *ngIf="!currentUser?.username"  nz-submenu nzOpen [nzTitle]="'USER.PERSONAL' | translate" nzIcon="user">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a (click)=login()>{{ 'USER.LOGIN' | translate }}  </a>
+          </li>
+        </ul>
+      </li>
+      
     </ul>
   </nz-sider>
   <nz-layout class="right-layout">

@@ -6,6 +6,7 @@ namespace AuthTest.Enums
 {
     public enum CityEnum
     {
-        Zvenigorod =1, Moscow=2, Mozhaysk = 3
+        Zvenigorod =1, Moscow=2, Mozhaysk = 3,
+        Almaty = 4, Crimea = 5
     }
 }

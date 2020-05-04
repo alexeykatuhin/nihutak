@@ -23,6 +23,10 @@ namespace AuthTest.Data.Initialize
             , new Tag() { Id =(int)Enums.TagEnum.FromWindow, Name = "Из окна" }
             , new Tag() { Id =(int)Enums.TagEnum.River, Name = "Река" }
             , new Tag() { Id =(int)Enums.TagEnum.ModernArcitechture, Name = "Современная архитектура" }
+            , new Tag() { Id = (int)Enums.TagEnum.Mountains, Name = "Горы" }
+            , new Tag() { Id = (int)Enums.TagEnum.Sea, Name = "Море" }
+            , new Tag() { Id = (int)Enums.TagEnum.Century19, Name = "19 век" }
+
             );
 
         }

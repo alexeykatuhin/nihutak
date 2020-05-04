@@ -6,6 +6,7 @@ namespace AuthTest.Enums
 {
     public enum CountryEnum
     {
-        Russia=1
+        Russia=1,
+        Kz=2
     }
 }

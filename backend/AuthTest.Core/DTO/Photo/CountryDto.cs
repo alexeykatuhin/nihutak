@@ -8,4 +8,9 @@ namespace AuthTest.Core.DTO.Photo
     {
         public string Code { get; set; }
     }
+
+    public class CoutryCitiesDto: CountryDto
+    {
+        public List<SimpleDto> Cities { get; set; }
+    }
 }

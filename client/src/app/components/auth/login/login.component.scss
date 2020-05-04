@@ -26,3 +26,13 @@
   .vk{
     background-image: url('./../../../../assets/img/Icon_social_block_vk.png');
   }
+
+  .wrapper{
+    height: 100%;
+    /* height: fit-content; */
+    display: flex;
+    /* margin: auto; */
+    background-color: white;
+    /* width: fit-content; */
+    justify-content: start;
+  }

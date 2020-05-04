@@ -17,6 +17,13 @@ namespace AuthTest.Data.Initialize
                 Code = "ru",
                 Name = "Россия"
 
+            },
+            new Country
+            {
+                Id = (int)CountryEnum.Kz,
+                Code = "kz",
+                Name = "Казахстан"
+
             });
             context.SaveChanges();
         }

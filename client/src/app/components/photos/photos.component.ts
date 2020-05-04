@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { User } from '../../_models';
 import { UserService } from '../../_services';
 import { PhotosService } from 'src/app/_services/photos.service';
+import { combineLatest } from 'rxjs';
+import { PhotoFilterDto } from 'src/app/_models/photo-filter-dto';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({ templateUrl: 'photos.component.html' , styleUrls : ['photos.component.scss'] })
@@ -11,29 +14,86 @@ export class PhotosComponent {
     loadingMore = false
     photos;
     page = 0;
-
-    constructor(private photoService: PhotosService) { }
+    tags;
+    cities;
+    countries;
+    filter = new PhotoFilterDto()
+    selectedPhoto = null;
+    constructor(private photoService: PhotosService,private activatedRoute: ActivatedRoute
+        ,private router: Router) {
+        
+     }
 
     ngOnInit() {
         this.loading = true;
-        this.photoService.getPhotos().pipe(first()).subscribe(res => {
-            this.loading = false;
-            this.photos = res;
-           console.log(res)
-        });
+
+        this.photoService.getFilterData().subscribe((filt) => {
+            this.tags = filt.tags;
+            this.countries = filt.countries;
+            this.routeProcess()
+            this.photoService.getPhotos(this.filter).subscribe((res) => {
+                this.photos = res;
+                this.loading = false;
+            })
+        })
     }
-    getClass(photo){
-        return 'flag-icon flag-icon-'+photo.country.code;
+
+    routeProcess(){
+        if (this.activatedRoute.snapshot.queryParams.tags){
+            this.filter.Tags = this.activatedRoute.snapshot.queryParams.tags.split(',').map(x=>Number.parseInt(x))
+        }
+        if (this.activatedRoute.snapshot.queryParams.countries){
+            this.filter.Countries = this.activatedRoute.snapshot.queryParams.countries.split(',').map(x=>Number.parseInt(x))
+        }
+        if (this.activatedRoute.snapshot.queryParams.cities){
+            this.filter.Cities = this.activatedRoute.snapshot.queryParams.cities.split(',').map(x=>Number.parseInt(x))
+        }  
+    }
+
+    getClass(code){
+        return 'flag-icon flag-icon-'+code;
     }
 
     onScroll(){
         if(this.loadingMore)
             return;
         this.loadingMore = true;
-        this.page++;
-        this.photoService.getPhotos(this.page).pipe(first()).subscribe(res => {
+        this.filter.Page++;
+        this.photoService.getPhotos(this.filter).pipe(first()).subscribe(res => {
             this.loadingMore = false;
             this.photos = this.photos.concat(res);
         });
+    }
+
+    applyFilters(){        
+        this.loading = true;
+        this.filter.Page = 0;
+        this.photoService.getPhotos(this.filter).pipe(first()).subscribe(res => {      
+            this.photos = res;
+            this.loading = false;
+        });
+        console.log(this.filter.Tags.join(','))
+        this.router.navigate(['/'],{
+            relativeTo: this.activatedRoute,
+            queryParams: {
+            tags: this.filter.Tags.join(','),
+            countries: this.filter.Countries.join(','),
+            cities: this.filter.Cities.join(','),
+        }})
+    }
+
+    resetFilters(){
+        this.loading = true;
+        this.filter = new PhotoFilterDto();
+        this.photoService.getPhotos(this.filter).pipe(first()).subscribe(res => {      
+            this.photos = res;
+            this.loading = false;
+        });
+        this.router.navigate(['/'],{
+            relativeTo: this.activatedRoute})
+    }
+
+    handleCancel(){
+        this.selectedPhoto = null
     }
 }

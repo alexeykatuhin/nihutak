@@ -53,6 +53,25 @@ namespace AuthTest.Data.Initialize
                 CreatedDt = new DateTime(2018, 10, 8)
             });
 
+
+            context.Photos.AddOrUpdate(new Photo()
+            {
+                Id =6,
+                Url = "https://live.staticflickr.com/1843/43876910545_2504c9674f_k.jpg",
+                Description = "Алматинская телебашня и горы",
+                CityId = (int)Enums.CityEnum.Almaty,
+                CreatedDt = new DateTime(2018, 9, 16)
+            });
+
+            context.Photos.AddOrUpdate(new Photo()
+            {
+                Id = 7,
+                Url = "https://live.staticflickr.com/5619/21725414352_03c556bedb_k.jpg",
+                Description = "Форосская церковь",
+                CityId = (int)Enums.CityEnum.Crimea,
+                CreatedDt = new DateTime(2013, 8, 20)
+            });
+
             context.SaveChanges();
 
 
@@ -76,7 +95,11 @@ namespace AuthTest.Data.Initialize
             context.PhotoTags.AddOrUpdate(new PhotoTag { PhotoId = 4, TagId = (int)TagEnum.Sky });
 
             context.PhotoTags.AddOrUpdate(new PhotoTag { PhotoId = 5, TagId = (int)TagEnum.FromWindow });
-            context.PhotoTags.AddOrUpdate(new PhotoTag { PhotoId = 5, TagId = (int)TagEnum.ModernArcitechture });
+
+            context.PhotoTags.AddOrUpdate(new PhotoTag { PhotoId = 6, TagId = (int)TagEnum.Mountains });
+
+            context.PhotoTags.AddOrUpdate(new PhotoTag { PhotoId = 7, TagId = (int)TagEnum.Sea });
+            context.PhotoTags.AddOrUpdate(new PhotoTag { PhotoId = 7, TagId = (int)TagEnum.Century19 });
         }
     }
 }

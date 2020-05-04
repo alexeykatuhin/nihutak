@@ -8,6 +8,7 @@ namespace AuthTest.Enums
     {
         People =1, Cats =2, Snow =3,
         Arcitechture, RussianStyle, Monastery, Century15,
-        Church, Sky, Sunrise, FromWindow, River, ModernArcitechture
+        Church, Sky, Sunrise, FromWindow, River, ModernArcitechture,
+        Mountains, Sea, Century19
     }
 }

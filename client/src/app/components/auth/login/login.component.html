@@ -1,3 +1,4 @@
+<div class="wrapper">
 <form *ngIf ="!loading" nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
   
     <nz-form-item>
@@ -23,7 +24,7 @@
       </nz-form-control>
     </nz-form-item>  
     <div>
-    <span class="pull-left"> login methods</span>
+    <span class="pull-left">Другие способы</span>
     <div  (click)="externalAuth('Google')" style="margin-left: 10px;" class="google pict pull-right">
    </div>
     <div (click)="externalAuth('Vk')" style="margin-right: 10px;" class="vk pict pull-right">
@@ -31,4 +32,5 @@
   </div>
   </form>  
   <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+</div>
   <nz-spin class="spinner" *ngIf ="loading" nzSimple [nzSize]="'large'"></nz-spin>

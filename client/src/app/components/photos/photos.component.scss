@@ -23,3 +23,57 @@
       margin-right: 3px;
     }
   }
+
+  nz-select {
+    width: 100%;
+    margin-bottom: 1vh;
+  }
+
+
+  @media screen and (max-width: 768px){
+    .btn-wrapper{
+      display: block!important;
+      button{
+        width: 100%;
+    margin-top: 0.5vh!important;
+    margin-left: 0!important;
+    margin-right: 0!important;
+    margin-bottom: 0!important;
+      }
+      }
+  }
+
+  .btn-wrapper{
+    justify-content: flex-end;
+    display: flex;
+    button{
+      
+    margin: 1vh;
+    }
+  }
+
+  ::ng-deep .vertical-center-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+  }
+
+  ::ng-deep .vertical-center-modal .ant-modal {
+    top: 0;
+    padding-bottom: 0;
+    .ant-modal-body{
+      padding: 0;
+    }
+  }
+
+  @media screen and (orientation:portrait) {
+   .modal-img{
+    width: 95vw;
+   }
+}
+/* Landscape */
+@media screen and (orientation:landscape) {
+  .modal-img{
+    height: 95vh;
+  }
+}

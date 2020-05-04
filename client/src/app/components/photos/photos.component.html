@@ -1,19 +1,38 @@
 <div class="photos" infiniteScroll [infiniteScrollDistance]="2"
 [infiniteScrollThrottle]="50" (scrolled)="onScroll()" *ngIf ="!loading">
+<nz-collapse>
+  <nz-collapse-panel  [nzHeader]="'Фильтры'" [nzActive]="true" [nzDisabled]="false">
+    <nz-select [(ngModel)]="filter.Tags" [nzSize]="size" nzMode="tags" nzPlaceHolder="Выберите тэги">
+      <nz-option *ngFor="let option of tags" [nzLabel]="option.name" [nzValue]="option.id"></nz-option>
+    </nz-select>
+    <nz-select [(ngModel)]="filter.Countries" [nzSize]="size" nzMode="tags" nzPlaceHolder="Выберите страны">   
+      <nz-option *ngFor="let option of countries" nzCustomContent  [nzLabel]="option.name" [nzValue]="option.id"><span [class]="getClass(option.code)"></span>{{option.name}}</nz-option>
+    </nz-select>
+    <nz-select [(ngModel)]="filter.Cities" [nzSize]="size" nzMode="tags"  nzPlaceHolder="Выберите регионы">   
+      <nz-option-group *ngFor="let country of countries" [nzLabel]="country.name" >
+        <nz-option *ngFor="let option of country.cities"  [nzLabel]="option.name" [nzValue]="option.id"></nz-option>
+      </nz-option-group>
+    </nz-select>
+    <div class="btn-wrapper">
+    <button (click)="applyFilters()" nz-button nzType="primary">Применить фильтры</button>
+    <button *ngIf="filter.Tags.length>0 || filter.Countries.length>0 || filter.Cities.length>0" (click)="resetFilters()" nz-button nzType="default">Сбросить фильтры</button>
+  </div>
+  </nz-collapse-panel>
+</nz-collapse>
 <div  *ngFor="let photo of photos">
     
 <nz-card   nzHoverable style="width:240px" [nzCover]="coverTemplate" >
     <!-- <nz-card-meta nzTitle="Europe Street beat" nzDescription="www.instagram.com">!!!</nz-card-meta> -->
   </nz-card>
   <ng-template #coverTemplate>
-    <img alt="example" [src]="photo.url" />
+    <img (click)="selectedPhoto = photo" alt="example" [src]="photo.url" />
     <div class="desc-wrapper">
     <div class="tags">
         <nz-tag  *ngFor="let tag of photo.tags" >{{tag.name}}</nz-tag>    
     </div>
     <div class="desc">{{photo.description}}</div>
     <div class="date">{{photo.date}}</div>
-    <div class="geo"><span [class]="getClass(photo)"></span><span>{{photo.city.name}}</span></div>
+    <div class="geo"><span [class]="getClass(photo.country.code)"></span><span>{{photo.city.name}}</span></div>
 </div>
   </ng-template>  
 </div>
@@ -25,4 +44,8 @@
 </div>
 </div>
   <nz-spin class="spinner" *ngIf ="loading" nzSimple [nzSize]="'large'"></nz-spin>
+
+  <nz-modal   nzWrapClassName="vertical-center-modal" nzWidth="fit-content" [nzFooter]="null" [(nzVisible)]="selectedPhoto"  (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <img class="modal-img"  *ngIf = "selectedPhoto != null"  alt="example" [src]="selectedPhoto.url" />
+  </nz-modal>
 

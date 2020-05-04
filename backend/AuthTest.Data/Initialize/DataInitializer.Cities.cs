@@ -28,6 +28,18 @@ namespace AuthTest.Data.Initialize
                 Id = (int)Enums.CityEnum.Mozhaysk,
                 Name = "Можайск",
                 CountryId = (int)CountryEnum.Russia
+            },
+            new City
+            {
+                Id = (int)Enums.CityEnum.Almaty,
+                Name = "Алматы",
+                CountryId = (int)CountryEnum.Kz
+            },
+            new City
+            {
+                Id = (int)Enums.CityEnum.Crimea,
+                Name = "Крым",
+                CountryId = (int)CountryEnum.Russia
             });
 
             context.SaveChanges();
