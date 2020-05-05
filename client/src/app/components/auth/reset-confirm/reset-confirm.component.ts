@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { AuthenticationService } from 'src/app/_services';
 import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from 'src/app/_services/authentication.service';
 
 @Component({ 
     templateUrl: 'reset-confirm.component.html'

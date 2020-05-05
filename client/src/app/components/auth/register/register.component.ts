@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { AuthenticationService } from 'src/app/_services';
+import { AuthenticationService } from 'src/app/_services/authentication.service';
 
 
 @Component({ templateUrl: 'register.component.html', styleUrls : ['register.component.scss'] })

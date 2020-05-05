@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'src/app/_services';
 import { ActivatedRoute } from '@angular/router';
+import { AuthenticationService } from 'src/app/_services/authentication.service';
 
 @Component({ templateUrl: 'confirm-email.component.html' })
 export class ConfirmEmailComponent implements OnInit {

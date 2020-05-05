@@ -30,8 +30,8 @@ import { ConfigModule } from 'ngx-envconfig';
 import { PhotosComponent } from './components/photos/photos.component';
 import { PhotosService } from './_services/photos.service';
 import { environment } from '../environments/environment';
-import { AuthenticationService } from './_services';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { AuthenticationService } from './_services/authentication.service';
 
 registerLocaleData(en);
 export function HttpLoaderFactory(http: HttpClient) {
@@ -70,7 +70,7 @@ export function provideConfig()
                 deps: [HttpClient]
             }
         }),       
-    SocialLoginModule.initialize(config),
+    SocialLoginModule,
     InfiniteScrollModule
     ],
     declarations: [
@@ -84,8 +84,8 @@ export function provideConfig()
         PhotosComponent
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        AuthenticationService,
+
         { provide: NZ_I18N, useValue: en_US },
         {
             provide: AuthServiceConfig,
@@ -93,7 +93,8 @@ export function provideConfig()
           },
           ErrorService,
           PhotosService,
-          AuthenticationService
+          { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+          { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     ],
     bootstrap: [AppComponent]
 })

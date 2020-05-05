@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +12,6 @@ using Microsoft.Extensions.Logging;
 namespace AuthTest1.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -26,16 +28,20 @@ namespace AuthTest1.Controllers
 
         //[Authorize]
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        [Route("")]
+        public ContentResult Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            var s =System.IO.File.ReadAllText( Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/index.html"));
+            return new ContentResult
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+                ContentType = "text/html",
+                Content = s
+            };
+            return            Content(s);
+            //var response = new HttpResponseMessage();
+            //response.Content = new StringContent(s);
+            //response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+            //return response;
         }
     }
 }

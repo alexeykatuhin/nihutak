@@ -2,13 +2,13 @@
 [infiniteScrollThrottle]="50" (scrolled)="onScroll()" *ngIf ="!loading">
 <nz-collapse>
   <nz-collapse-panel  [nzHeader]="'Фильтры'" [nzActive]="true" [nzDisabled]="false">
-    <nz-select [(ngModel)]="filter.Tags" [nzSize]="size" nzMode="tags" nzPlaceHolder="Выберите тэги">
+    <nz-select [(ngModel)]="filter.Tags"  nzMode="tags" nzPlaceHolder="Выберите тэги">
       <nz-option *ngFor="let option of tags" [nzLabel]="option.name" [nzValue]="option.id"></nz-option>
     </nz-select>
-    <nz-select [(ngModel)]="filter.Countries" [nzSize]="size" nzMode="tags" nzPlaceHolder="Выберите страны">   
+    <nz-select [(ngModel)]="filter.Countries"  nzMode="tags" nzPlaceHolder="Выберите страны">   
       <nz-option *ngFor="let option of countries" nzCustomContent  [nzLabel]="option.name" [nzValue]="option.id"><span [class]="getClass(option.code)"></span>{{option.name}}</nz-option>
     </nz-select>
-    <nz-select [(ngModel)]="filter.Cities" [nzSize]="size" nzMode="tags"  nzPlaceHolder="Выберите регионы">   
+    <nz-select [(ngModel)]="filter.Cities"  nzMode="tags"  nzPlaceHolder="Выберите регионы">   
       <nz-option-group *ngFor="let country of countries" [nzLabel]="country.name" >
         <nz-option *ngFor="let option of country.cities"  [nzLabel]="option.name" [nzValue]="option.id"></nz-option>
       </nz-option-group>
@@ -45,7 +45,7 @@
 </div>
   <nz-spin class="spinner" *ngIf ="loading" nzSimple [nzSize]="'large'"></nz-spin>
 
-  <nz-modal   nzWrapClassName="vertical-center-modal" nzWidth="fit-content" [nzFooter]="null" [(nzVisible)]="selectedPhoto"  (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <nz-modal   nzWrapClassName="vertical-center-modal" nzWidth="fit-content" [nzFooter]="null" [(nzVisible)]="selectedPhoto"  (nzOnCancel)="handleCancel()" >
     <img class="modal-img"  *ngIf = "selectedPhoto != null"  alt="example" [src]="selectedPhoto.url" />
   </nz-modal>
 

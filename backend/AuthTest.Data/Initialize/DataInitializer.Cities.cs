@@ -1,9 +1,7 @@
 ﻿using AuthTest.Data.Entities;
 using AuthTest.Data.Extensions;
 using AuthTest.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthTest.Data.Initialize
 {
@@ -11,38 +9,46 @@ namespace AuthTest.Data.Initialize
     {
         public static void SeedCities(ApplicationDbContext context)
         {
-            context.Cities.AddOrUpdate(new City
+            using (var transaction = context.Database.BeginTransaction())
             {
-                Id = (int)Enums.CityEnum.Zvenigorod,
-                Name = "Звенигород",
-                CountryId = (int)CountryEnum.Russia
-            },
-            new City
-            {
-                Id = (int)Enums.CityEnum.Moscow,
-                Name = "Москва",
-                CountryId = (int)CountryEnum.Russia
-            },
-            new City
-            {
-                Id = (int)Enums.CityEnum.Mozhaysk,
-                Name = "Можайск",
-                CountryId = (int)CountryEnum.Russia
-            },
-            new City
-            {
-                Id = (int)Enums.CityEnum.Almaty,
-                Name = "Алматы",
-                CountryId = (int)CountryEnum.Kz
-            },
-            new City
-            {
-                Id = (int)Enums.CityEnum.Crimea,
-                Name = "Крым",
-                CountryId = (int)CountryEnum.Russia
-            });
+                context.Cities.AddOrUpdate(new City
+                {
+                    Id = (int)Enums.CityEnum.Zvenigorod,
+                    Name = "Звенигород",
+                    CountryId = (int)CountryEnum.Russia
+                },
+    new City
+    {
+        Id = (int)Enums.CityEnum.Moscow,
+        Name = "Москва",
+        CountryId = (int)CountryEnum.Russia
+    },
+    new City
+    {
+        Id = (int)Enums.CityEnum.Mozhaysk,
+        Name = "Можайск",
+        CountryId = (int)CountryEnum.Russia
+    },
+    new City
+    {
+        Id = (int)Enums.CityEnum.Almaty,
+        Name = "Алматы",
+        CountryId = (int)CountryEnum.Kz
+    },
+    new City
+    {
+        Id = (int)Enums.CityEnum.Crimea,
+        Name = "Крым",
+        CountryId = (int)CountryEnum.Russia
+    });
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Cities ON;");
 
-            context.SaveChanges();
+                context.SaveChanges();
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Cities OFF");
+                transaction.Commit();
+            }
+
+
         }
     }
 }

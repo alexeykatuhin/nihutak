@@ -1,12 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthenticationService } from './_services';
 import { User } from './_models';
 import { SettingService } from './_services/settings.service';
 import { ErrorService } from './_services/error.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AuthenticationService } from './_services/authentication.service';
 
 @Component({ selector: 'app', templateUrl: 'app.component.html', styleUrls: ['app.component.scss']})
 export class AppComponent  implements OnDestroy {

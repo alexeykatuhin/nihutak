@@ -21,6 +21,7 @@ using AuthTest.API.Config;
 using AuthTest.Data.Initialize;
 using AuthTest.Core.Abstract;
 using AuthTest.Core.Concrete;
+using Microsoft.AspNetCore.Http;
 
 namespace AuthTest1
 {
@@ -98,8 +99,10 @@ namespace AuthTest1
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext dbContext, RoleManager<IdentityRole> roleManager)
         {
+
             app.UseExceptionHandler("/error");
             app.UseStatusCodePages();
+            app.UseStaticFiles();
 
             app.UseCors(builder => { builder.AllowAnyOrigin(); builder.AllowAnyMethod(); builder.AllowAnyHeader(); });
 

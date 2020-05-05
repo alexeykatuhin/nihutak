@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:50686',
+  // apiUrl: 'http://37.140.192.20/plesk-site-preview/nihutak.ru',
   state: 'development'
 };
 
