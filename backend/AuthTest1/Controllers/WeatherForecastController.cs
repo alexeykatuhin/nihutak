@@ -31,17 +31,16 @@ namespace AuthTest1.Controllers
         [Route("")]
         public ContentResult Get()
         {
+#if DEBUG
+            var s = "";
+#else
             var s =System.IO.File.ReadAllText( Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/index.html"));
+#endif
             return new ContentResult
             {
                 ContentType = "text/html",
                 Content = s
             };
-            return            Content(s);
-            //var response = new HttpResponseMessage();
-            //response.Content = new StringContent(s);
-            //response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
-            //return response;
         }
     }
 }

@@ -17,6 +17,7 @@ export class PhotosComponent {
     tags;
     cities;
     countries;
+    years;
     filter = new PhotoFilterDto()
     selectedPhoto = null;
     constructor(private photoService: PhotosService,private activatedRoute: ActivatedRoute
@@ -30,9 +31,11 @@ export class PhotosComponent {
         this.photoService.getFilterData().subscribe((filt) => {
             this.tags = filt.tags;
             this.countries = filt.countries;
+            this.years = filt.years;
             this.routeProcess()
             this.photoService.getPhotos(this.filter).subscribe((res) => {
-                this.photos = res;
+                this.filter.AlreadyShownPhotos = res.alreadyShownPhotos;
+                this.photos = res.photos;
                 this.loading = false;
             })
         })
@@ -48,6 +51,9 @@ export class PhotosComponent {
         if (this.activatedRoute.snapshot.queryParams.cities){
             this.filter.Cities = this.activatedRoute.snapshot.queryParams.cities.split(',').map(x=>Number.parseInt(x))
         }  
+        if (this.activatedRoute.snapshot.queryParams.years){
+            this.filter.Years = this.activatedRoute.snapshot.queryParams.years.split(',').map(x=>Number.parseInt(x))
+        } 
     }
 
     getClass(code){
@@ -61,7 +67,7 @@ export class PhotosComponent {
         this.filter.Page++;
         this.photoService.getPhotos(this.filter).pipe(first()).subscribe(res => {
             this.loadingMore = false;
-            this.photos = this.photos.concat(res);
+            this.photos = this.photos.concat(res.photos);
         });
     }
 
@@ -69,7 +75,7 @@ export class PhotosComponent {
         this.loading = true;
         this.filter.Page = 0;
         this.photoService.getPhotos(this.filter).pipe(first()).subscribe(res => {      
-            this.photos = res;
+            this.photos = res.photos;
             this.loading = false;
         });
         console.log(this.filter.Tags.join(','))
@@ -79,6 +85,8 @@ export class PhotosComponent {
             tags: this.filter.Tags.join(','),
             countries: this.filter.Countries.join(','),
             cities: this.filter.Cities.join(','),
+            years: this.filter.Years.join(','),
+            order: this.filter.Order
         }})
     }
 
@@ -86,7 +94,7 @@ export class PhotosComponent {
         this.loading = true;
         this.filter = new PhotoFilterDto();
         this.photoService.getPhotos(this.filter).pipe(first()).subscribe(res => {      
-            this.photos = res;
+            this.photos = res.photos;
             this.loading = false;
         });
         this.router.navigate(['/'],{

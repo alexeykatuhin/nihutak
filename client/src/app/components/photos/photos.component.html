@@ -13,9 +13,17 @@
         <nz-option *ngFor="let option of country.cities"  [nzLabel]="option.name" [nzValue]="option.id"></nz-option>
       </nz-option-group>
     </nz-select>
+    <nz-select [(ngModel)]="filter.Years"  nzMode="tags" nzPlaceHolder="Выберите годы">   
+      <nz-option *ngFor="let option of years"  [nzLabel]="option" [nzValue]="option"></nz-option>
+    </nz-select>
+    <nz-select [(ngModel)]="filter.Order"  nzPlaceHolder="Выберите годы">   
+      <nz-option nzLabel="В случайном порядке" [nzValue]="1"></nz-option>
+      <nz-option nzLabel="Сначала новые" [nzValue]="2"></nz-option>
+      <nz-option nzLabel="Сначала старые" [nzValue]="3"></nz-option>
+    </nz-select>
     <div class="btn-wrapper">
     <button (click)="applyFilters()" nz-button nzType="primary">Применить фильтры</button>
-    <button *ngIf="filter.Tags.length>0 || filter.Countries.length>0 || filter.Cities.length>0" (click)="resetFilters()" nz-button nzType="default">Сбросить фильтры</button>
+    <button *ngIf="filter.Tags.length>0 || filter.Countries.length>0 || filter.Cities.length>0 || filter.Years.length>0" (click)="resetFilters()" nz-button nzType="default">Сбросить фильтры</button>
   </div>
   </nz-collapse-panel>
 </nz-collapse>

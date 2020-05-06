@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AuthTest.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,5 +12,7 @@ namespace AuthTest.Core.DTO.Photo
         public List<int> Countries { get; set; }
         public List<int> Cities { get; set; }
         public List<int> Years { get; set; }
+        public OrderEnum Order { get; set; }
+        public List<int> AlreadyShownPhotos { get; set; }
     }
 }

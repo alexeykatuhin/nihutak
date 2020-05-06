@@ -8,5 +8,6 @@ namespace AuthTest.Core.DTO.Photo
     {
         public List<SimpleDto> Tags { get; set; }
         public List<CoutryCitiesDto> Countries { get; set; }
+        public List<int> Years { get; set; }
     }
 }

@@ -16,4 +16,10 @@ namespace AuthTest.Core.DTO.Photo
         public CountryDto Country { get; set; }
     }
 
+    public class PhotoExtDto
+    {
+        public List<PhotoDto> Photos { get; set; }
+        public List<int> AlreadyShownPhotos { get; set; }
+    }
+
 }
