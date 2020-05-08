@@ -9,7 +9,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-import { HomeComponent } from './components/home';
 import { appRoutingModule } from './app-routing.module';
 import { IconsProviderModule } from './icons-provider.module';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
@@ -27,7 +26,6 @@ import { ResetConfirmComponent } from './components/auth/reset-confirm/reset-con
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { ErrorService } from './_services/error.service';
 import { ConfigModule } from 'ngx-envconfig';
-import { PhotosComponent } from './components/photos/photos.component';
 import { PhotosService } from './_services/photos.service';
 import { environment } from '../environments/environment';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -70,18 +68,15 @@ export function provideConfig()
                 deps: [HttpClient]
             }
         }),       
-    SocialLoginModule,
-    InfiniteScrollModule
+    SocialLoginModule
     ],
     declarations: [
         AppComponent,
-        HomeComponent,
         LoginComponent,
         RegisterComponent,
         ConfirmEmailComponent,
         ResetConfirmComponent,
-        ResetPasswordComponent,
-        PhotosComponent
+        ResetPasswordComponent
     ],
     providers: [
         AuthenticationService,

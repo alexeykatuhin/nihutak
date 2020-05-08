@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { first, map } from 'rxjs/operators';
-import { User } from '../../_models';
-import { UserService } from '../../_services';
 import { PhotosService } from 'src/app/_services/photos.service';
 import { combineLatest } from 'rxjs';
 import { PhotoFilterDto } from 'src/app/_models/photo-filter-dto';
