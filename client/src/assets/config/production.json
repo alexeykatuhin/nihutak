@@ -1,3 +1,4 @@
 {
-    "HOST_API": "http://development.server.com"
+    "HOST_API": "http://localhost:50686",
+    "HOST_API1": "http://37.140.192.20/plesk-site-preview/nihutak.ru"
 }

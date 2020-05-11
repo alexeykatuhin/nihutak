@@ -30,6 +30,7 @@ import { PhotosService } from './_services/photos.service';
 import { environment } from '../environments/environment';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { AuthenticationService } from './_services/authentication.service';
+import { CookieService } from 'ngx-cookie-service';
 
 registerLocaleData(en);
 export function HttpLoaderFactory(http: HttpClient) {
@@ -71,6 +72,7 @@ export function provideConfig()
     SocialLoginModule
     ],
     declarations: [
+
         AppComponent,
         LoginComponent,
         RegisterComponent,
@@ -90,6 +92,7 @@ export function provideConfig()
           PhotosService,
           { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
           { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+          CookieService 
     ],
     bootstrap: [AppComponent]
 })

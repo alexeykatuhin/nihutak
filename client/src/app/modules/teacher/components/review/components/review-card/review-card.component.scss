@@ -1,0 +1,48 @@
+.wrapper{
+    display: flex;
+    justify-content: center;
+}
+
+:host ::ng-deep .ant-form-item{
+    display: flex;
+    justify-content: center;
+}
+form{
+    max-width: 600px;
+    width: 100%;
+    margin-top: 5vh;
+}
+
+.header{
+    display: flex;
+    justify-content: center;
+    padding-top: 5vh;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 768px){
+    :host ::ng-deep .ant-form-item{
+        display: block;
+        padding-left: 2vw;
+    padding-right: 2vw;
+    }
+}
+
+.spinner{
+    height: auto;
+    position: fixed;
+    top: 50%;
+    left: calc(50% - 16px);
+}
+
+.backto{
+    position: absolute;
+    left: 10vw;
+    cursor: pointer;
+}
+@media screen and (max-width: 768px){
+    .backto{
+        left: 5vw;
+    }
+}

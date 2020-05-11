@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterStateSnapshot } from '@angular/router';
 import { User } from 'src/app/_models';
 import { AuthenticationService } from 'src/app/_services/authentication.service';
 
@@ -11,7 +11,7 @@ export class NihutakComponent   {
 
     constructor(
         private router: Router,
-        private authenticationService: AuthenticationService, 
+        private authenticationService: AuthenticationService
     ) {
         this.authenticationService.currentUser.subscribe(x => {this.currentUser = x; 
             console.log(this.currentUser)});
@@ -21,7 +21,9 @@ export class NihutakComponent   {
         this.authenticationService.logout();
         // this.router.navigate(['/login']);
     }
-    public login(){   this.router.navigate(['/login']);}
+    public login(){  
+        this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+}
 
 
 }

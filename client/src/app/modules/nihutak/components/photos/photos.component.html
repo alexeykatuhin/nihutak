@@ -30,17 +30,16 @@
 <div  *ngFor="let photo of photos">
     
 <nz-card   nzHoverable style="width:240px" [nzCover]="coverTemplate" >
-    <!-- <nz-card-meta nzTitle="Europe Street beat" nzDescription="www.instagram.com">!!!</nz-card-meta> -->
   </nz-card>
   <ng-template #coverTemplate>
     <img (click)="selectedPhoto = photo" alt="example" [src]="photo.url" />
     <div class="desc-wrapper">
     <div class="tags">
-        <nz-tag  *ngFor="let tag of photo.tags" >{{tag.name}}</nz-tag>    
+        <nz-tag class="cursor-pointer" (click)="onClick(tag.id, 'tag')"  *ngFor="let tag of photo.tags" >{{tag.name}}</nz-tag>    
     </div>
     <div class="desc">{{photo.description}}</div>
     <div class="date">{{photo.date}}</div>
-    <div class="geo"><span [class]="getClass(photo.country.code)"></span><span>{{photo.city.name}}</span></div>
+    <div class="geo cursor-pointer" ><span [class]="getClass(photo.country.code)" (click)="onClick(photo.country.id, 'country')"></span><span (click)="onClick(photo.city.id,'city')">{{photo.city.name}}</span></div>
 </div>
   </ng-template>  
 </div>

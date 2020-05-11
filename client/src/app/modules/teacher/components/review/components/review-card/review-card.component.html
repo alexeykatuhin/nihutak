@@ -1,0 +1,32 @@
+
+   <div> <div class="header"><div (click)="back()" class="backto"><i  nz-icon nzType="left" nzTheme="outline"></i></div><span>Вариант {{id}}</span> 
+      <span *ngIf="editMode">*</span>
+        <a *ngIf="currentUser && currentUser.isAdmin && !editMode" (click)="edit()"><i style="font-size: 15px;padding-left: 5px;" nz-icon nzType="edit" nzTheme="outline"></i></a>
+    </div>
+  </div>
+<div class="wrapper">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <nz-form-item *ngFor="let answer of answers">
+          <nz-form-label [nzFor]="'field' + answer.id" [nzSpan]="5">Вопрос {{answer.id}}</nz-form-label>
+          <nz-form-control  nzHasFeedback [nzSpan]="12" [nzErrorTip]="combineTpl">
+            <input [formControlName]="'field' + answer.id"  nz-input [(ngModel)]="answer.answer" name="pattern"  pattern="^-?\d*\.?\d*$"/>
+            <ng-template #combineTpl let-control>
+              <ng-container *ngIf="control && control.hasError('pattern')">Вводите только числа!</ng-container>
+              <ng-container *ngIf="control && control.hasError('custom')">{{answer.errorMessage}}</ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item style="margin-bottom: 5vh;">
+            <nz-form-control *ngIf="!editMode">
+              <button [disabled]="validateForm.invalid" nz-button nzType="primary">Проверить</button>
+              <button type="button" (click)="cancel()" style="margin-left: 5px;" nz-button nzType="secondary">Сброс</button>
+            </nz-form-control>
+            <nz-form-control  *ngIf="editMode">
+              <button [disabled]="validateForm.invalid" nz-button nzType="primary">Сохранить</button>
+              <button type="button" (click)="cancel()" style="margin-left: 5px;" nz-button nzType="secondary">Отмена</button>
+            </nz-form-control>
+          </nz-form-item>
+      </form>
+</div>
+
+<nz-spin class="spinner" *ngIf ="loading" nzSimple [nzSize]="'large'"></nz-spin>

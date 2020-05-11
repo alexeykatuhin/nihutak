@@ -53,7 +53,7 @@ namespace AuthTest.API.Controllers
             }
 
             var list = query.Include(x => x.City).ThenInclude(x => x.Country).Include(X => X.PhotoTags).ThenInclude(x => x.Tag)
-                .Skip(filter.Page * pageSize).Take(pageSize);
+               .Take(pageSize);
 
 
             var lstDto = list.Select(x => _mapper.Map<PhotoDto>(x)).ToList();

@@ -1,0 +1,13 @@
+.wrapper{
+    display: flex;
+    justify-content: center;
+    height: 100%; 
+}
+
+nz-select{
+    max-width: 400px;
+    width: 100%;
+    margin: 0 8vw;
+    top: 30%;
+    height: fit-content;
+}

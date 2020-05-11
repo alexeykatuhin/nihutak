@@ -8,13 +8,14 @@ import { ResetPasswordComponent } from './components/auth/reset-password/reset-p
 import { ResetConfirmComponent } from './components/auth/reset-confirm/reset-confirm.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch:'full' },
+    { path: '', redirectTo: 'teacher', pathMatch:'full' },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'confirmemail', component: ConfirmEmailComponent },
     { path: 'resetpassword', component: ResetPasswordComponent },
     { path: 'resetconfirm', component: ResetConfirmComponent },
     { path: 'home', loadChildren: () => import('./modules/nihutak/nihutak.module').then(m=>m.NihutakModule)},
+    { path: 'teacher', loadChildren: () => import('./modules/teacher/teacher.module').then(m=>m.TeacherModule)},
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];

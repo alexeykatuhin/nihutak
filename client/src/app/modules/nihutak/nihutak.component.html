@@ -8,7 +8,7 @@
             [nzTrigger]="null"
             [nzCollapsedWidth]="0">
     <div class="sidebar-logo">
-      <a  routerLink="/">
+      <a  routerLink="/home">
         <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
         <h1>Nihutak</h1>
       </a>
@@ -17,7 +17,14 @@
       <li nz-submenu nzOpen nzTitle="Фото" nzIcon="picture">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/">Лента</a>
+            <a routerLink="/home">Лента</a>
+          </li>
+        </ul>
+      </li>
+      <li *ngIf="currentUser?.isAdmin" nz-submenu nzOpen nzTitle="Администрированние" nzIcon="deployment-unit">
+        <ul>
+          <li nz-menu-item nzMatchRouter>
+            <a routerLink="/home/addphoto">Добавить фото</a>
           </li>
         </ul>
       </li>

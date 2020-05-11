@@ -28,14 +28,14 @@ namespace AuthTest1.Controllers
 
         //[Authorize]
         [HttpGet]
-        [Route("")]
+        [Route("{*url}")]
         public ContentResult Get()
         {
-#if DEBUG
-            var s = "";
-#else
+//#if DEBUG
+//            var s = "";
+//#else
             var s =System.IO.File.ReadAllText( Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/index.html"));
-#endif
+//#endif
             return new ContentResult
             {
                 ContentType = "text/html",

@@ -1,0 +1,5 @@
+<div class="wrapper">
+    <nz-select [(ngModel)]="curOpt" (ngModelChange)="change()" nzPlaceHolder="Выберите номер варианта">
+        <nz-option  *ngFor="let option of options" [nzValue]="option" [nzLabel]="option"></nz-option>     
+    </nz-select>
+</div>
