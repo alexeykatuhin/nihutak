@@ -40,10 +40,12 @@ namespace AuthTest.API.Controllers
             if (filter.Years != null && filter.Years.Any())
                 query = query.Where(x => filter.Years.Contains(x.CreatedDt.Year));
 
+
+            query = query.Where(x => !filter.AlreadyShownPhotos.Contains(x.Id));
             switch (filter.Order)
             {
                 case Core.Enums.OrderEnum.Random:
-                    query = query.Where(x=> !filter.AlreadyShownPhotos.Contains(x.Id)).OrderBy(x => Guid.NewGuid());
+                    query = query.OrderBy(x => Guid.NewGuid());
                     break;
                 case Core.Enums.OrderEnum.Desc:
                     query = query.OrderByDescending(x => x.CreatedDt);

@@ -57,6 +57,9 @@ export class PhotosComponent implements OnInit {
         if (this.activatedRoute.snapshot.queryParams.years){
             this.filter.Years = this.activatedRoute.snapshot.queryParams.years.split(',').map(x=>Number.parseInt(x))
         } 
+        if (this.activatedRoute.snapshot.queryParams.order){
+            this.filter.Order =Number.parseInt( this.activatedRoute.snapshot.queryParams.order.split(','))
+        } 
     }
 
     getClass(code){
@@ -96,6 +99,7 @@ export class PhotosComponent implements OnInit {
     applyFilters(){        
         this.loading = true;
         this.filter.Page = 0;
+        this.filter.AlreadyShownPhotos = [];
         this.photoService.getPhotos(this.filter).pipe(first()).subscribe(res => {      
             this.photos = res.photos;
             this.filter.AlreadyShownPhotos = res.alreadyShownPhotos;
