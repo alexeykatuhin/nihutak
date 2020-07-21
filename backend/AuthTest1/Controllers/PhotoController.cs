@@ -1,5 +1,6 @@
 ﻿using AuthTest.Core.DTO;
 using AuthTest.Core.DTO.Photo;
+using AuthTest.Data.Comparers;
 using AuthTest.Data.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -63,19 +64,129 @@ namespace AuthTest.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetFilterData()
+        public async Task<IActionResult> Get(int id) 
+        {
+            var item =   await _context.Photos
+            .Include(x => x.City)
+            .ThenInclude(x => x.Country)
+            .Include(X => X.PhotoTags)
+            .ThenInclude(x => x.Tag).FirstOrDefaultAsync(x=>x.Id == id);
+
+            var itemDto = _mapper.Map<PhotoDto>(item);
+            return Ok(itemDto);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetFilterData(bool empty = false)
         {
             var res = new FilterSourceDto();
-            res.Tags = _context.Tags.Select(x => _mapper.Map<SimpleDto>(x)).ToList().OrderBy(x => x.Name).ToList();
+            var tags = _context.Tags.AsQueryable();
+            if (!empty)
+                tags = tags.Include(x => x.PhotoTags).Where(x => x.PhotoTags.Any());
+            res.Tags = tags.Select(x => _mapper.Map<SimpleDto>(x)).ToList().OrderBy(x => x.Name).ToList();
 
-            res.Countries = _context.Countries.Include(x => x.Cities).Select(x => _mapper.Map<CoutryCitiesDto>(x)).ToList().OrderBy(x => x.Name).ToList();
+            var countries = _context.Countries.Include(x => x.Cities).AsQueryable();
+            if (!empty)
+                countries = countries.Where(x => x.Cities.Any(y => y.Photos.Any()));
+
+
+            var c = countries.ToList();
+
+            res.Countries = _context.Countries.ToList().Select(x => _mapper.Map<CoutryCitiesDto>(x)).OrderBy(x => x.Name).ToList();
 
             res.Years = _context.Photos.Select(x => x.CreatedDt.Year).GroupBy(x => x).Select(x => x.Key).OrderByDescending(x=>x).ToList();
+
             
             return (Ok(res));
-
         }
-        //=> Ok(_context.Tags.Select(x => _mapper.Map<SimpleDto>(x)).ToList().OrderBy(x=>x.Name));
 
+        [HttpPost]
+        public async Task AddCountry([FromBody]CountryDto countryDto)
+        {
+            _context.Countries.Add(new Country { Code = countryDto.Code, Name = countryDto.Name });
+            await _context.SaveChangesAsync();
+        }
+
+        [HttpPost]
+        public async Task AddCity([FromBody]SimpleDto simpleDto)
+        {
+            _context.Cities.Add(new City { CountryId = simpleDto.Id.Value, Name = simpleDto.Name });
+            await _context.SaveChangesAsync();
+        }
+
+        [HttpPost]
+        public async Task AddPhoto([FromBody]PhotoDto photo)
+        {
+            await TagProcees(photo);
+            var photoItem = _mapper.Map<Photo>(photo);
+            _context.Photos.Add(photoItem);
+            await _context.SaveChangesAsync();
+
+            foreach (var item in photo.Tags)
+            {
+                _context.PhotoTags.Add(new PhotoTag { PhotoId = photoItem.Id, TagId = item.Id.Value });
+            }
+            
+            await _context.SaveChangesAsync();
+        }
+
+        [HttpPost]
+        public async Task UpdatePhoto([FromBody]PhotoDto photo)
+        {
+            try
+            {
+
+                var dbItem = await _context.Photos.Include(x=>x.PhotoTags).FirstOrDefaultAsync(x=>x.Id == photo.Id);
+                dbItem.Url = photo.Url;
+                dbItem.CityId = photo.City.Id.Value;
+                dbItem.CreatedDt = DateTime.Parse(photo.Date);
+                dbItem.Description = photo.Description;
+
+                await TagProcees(photo);
+
+
+                var photoTagsNew = photo.Tags.Select(x => new PhotoTag { PhotoId = dbItem.Id, TagId = x.Id.Value }).ToList();
+
+                var deleted = dbItem.PhotoTags.Except(photoTagsNew, new TagComparer());
+                var added = photoTagsNew.Except(dbItem.PhotoTags, new TagComparer());
+                _context.PhotoTags.RemoveRange(deleted);
+                _context.PhotoTags.AddRange(added);
+                //dbItem.PhotoTags = photo.Tags.Select(x => new PhotoTag { PhotoId = dbItem.Id, TagId = x.Id.Value }).ToList();
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        private async Task TagProcees(PhotoDto photo)
+        {
+            var tags = _context.Tags.ToList();
+            foreach (var item in photo.Tags)
+            {
+                var existed = tags.FirstOrDefault(x => x.Name.ToLower() == item.Name.ToLower());
+                if (existed != null)
+                {
+                    item.Id = existed.Id;
+                }
+                else
+                {
+                    var newTag = new Tag { Name = item.Name };
+                    _context.Tags.Add(newTag);
+                    await _context.SaveChangesAsync();
+                    item.Id = newTag.Id;
+                }
+            }
+        }
+
+        [HttpDelete]
+        public async Task Delete(int id)
+        {
+            var item = _context.Photos.Single(x => x.Id == id);
+            _context.Photos.Remove(item);
+        }
     }
 }

@@ -1,0 +1,94 @@
+<div *ngIf="!loading" class="wrapper">
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+            <nz-form-label  nzFor="url" [nzSm]="6" [nzXs]="24" nzRequired>URL</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24"  nzHasFeedback [nzSpan]="12">
+                <input nz-input formControlName="url" id="url" />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label  nzFor="city" [nzSm]="6" [nzXs]="24" nzRequired>City</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24"  nzHasFeedback [nzSpan]="12">
+                <nz-select formControlName="city" nzShowSearch nzAllowClear nzPlaceHolder="City">
+                    <nz-option-group *ngFor="let country of filter.countries" [nzLabel]="country.name" >
+                        <nz-option *ngFor="let option of country.cities"  [nzLabel]="option.name" [nzValue]="option.id"></nz-option>
+                      </nz-option-group>
+                  </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+        <a (click)="addModal = 'country'">Add Country</a>
+        <a (click)="addModal = 'city'" style="margin-left: 5px;">Add city</a>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>DatePicker</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <nz-date-picker formControlName="datePicker"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label  nzFor="url" [nzSm]="6" [nzXs]="24" nzRequired>Description</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24"  nzHasFeedback [nzSpan]="12">
+                <input nz-input formControlName="desc" id="desc" />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label  nzFor="tags" [nzSm]="6" [nzXs]="24" nzRequired>Tags</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24"  nzHasFeedback [nzSpan]="12">
+                <nz-select formControlName="tags"  nzMode="tags" nzPlaceHolder="Tags">
+                    <nz-option *ngFor="let option of filter.tags" [nzLabel]="option.name" [nzValue]="option.name"></nz-option>
+                  </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item nz-row class="register-area">
+          <nz-form-control [nzSpan]="14" [nzOffset]="6">
+            <button [disabled]="validateForm.invalid" nz-button nzType="primary">Submit</button>
+            <button style="margin-left: 5px;" (click)="delete()" *ngIf="id" type="button" nz-button nzType="danger">Delete</button>
+          </nz-form-control>
+        </nz-form-item>        
+    </form>
+</div>
+<nz-modal [(nzVisible)]="addModal" [nzFooter]="null" nzWrapClassName="vertical-center-modal"  (nzOnCancel)="handleCancel()" >
+        
+    <form *ngIf = "addModal == 'country'" nz-form [formGroup]="validateCountryForm" (ngSubmit)="submitFormCountry()">
+        <nz-form-item>
+            <nz-form-label  nzFor="code" [nzSm]="6" [nzXs]="24" nzRequired>Code</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24"  nzHasFeedback [nzSpan]="12">
+                <input nz-input formControlName="code" id="code" (change)="countryCodeChanged()"/>
+            </nz-form-control>
+        </nz-form-item>
+        <span [class]="countryCode"></span>
+        <nz-form-item>
+            <nz-form-label  nzFor="name" [nzSm]="6" [nzXs]="24" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24"  nzHasFeedback [nzSpan]="12">
+                <input nz-input formControlName="name" id="name" />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-row class="register-area">
+          <nz-form-control [nzSpan]="14" [nzOffset]="6">
+            <button [disabled]="validateCountryForm.invalid" nz-button nzType="primary">Submit</button>
+          </nz-form-control>
+        </nz-form-item>
+    </form>
+    <form *ngIf = "addModal == 'city'" nz-form [formGroup]="validateCityForm" (ngSubmit)="submitFormCity()">
+        <nz-form-item>
+            <nz-form-label  nzFor="country" [nzSm]="6" [nzXs]="24" nzRequired>Country</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24"  nzHasFeedback [nzSpan]="12">
+                <nz-select  formControlName="country" nzShowSearch nzAllowClear nzPlaceHolder="Country">
+                        <nz-option nzCustomContent *ngFor="let country of filter.countries"  [nzLabel]="country.name" [nzValue]="country.id"><span [class]="getClass(country.code)"></span>{{country.name}}</nz-option>               
+                  </nz-select>
+            </nz-form-control>
+        </nz-form-item>     
+        <nz-form-item>
+            <nz-form-label  nzFor="name" [nzSm]="6" [nzXs]="24" nzRequired>Name</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24"  nzHasFeedback [nzSpan]="12">
+                <input nz-input formControlName="name" id="name" />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item nz-row class="register-area">
+          <nz-form-control [nzSpan]="14" [nzOffset]="6">
+            <button [disabled]="validateCityForm.invalid" nz-button nzType="primary">Submit</button>
+          </nz-form-control>
+        </nz-form-item>
+    </form>
+  </nz-modal>

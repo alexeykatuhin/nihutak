@@ -14,9 +14,13 @@ export class AuthGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const currentUser = this.authenticationService.currentUserValue;
         if (currentUser) {
-            
+            if (route.data.isAdmin){
+                if (currentUser.isAdmin)
+                    return true
+            }
+            else
+                return true;
             // logged in so return true
-            return true;
         }
 
         // not logged in so redirect to login page with the return url

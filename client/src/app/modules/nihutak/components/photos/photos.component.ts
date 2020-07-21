@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { first, map } from 'rxjs/operators';
 import { PhotosService } from 'src/app/_services/photos.service';
 import { combineLatest } from 'rxjs';
 import { PhotoFilterDto } from 'src/app/_models/photo-filter-dto';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/_services/authentication.service';
 
 
 @Component({ templateUrl: 'photos.component.html' , styleUrls : ['photos.component.scss'] })
@@ -18,9 +19,13 @@ export class PhotosComponent implements OnInit {
     years;
     filter = new PhotoFilterDto()
     selectedPhoto = null;
+    isAdmin
+    editMode
+    
     constructor(private photoService: PhotosService,private activatedRoute: ActivatedRoute
-        ,private router: Router) {
-        
+        ,private router: Router,
+        private authenticationService: AuthenticationService) {
+            this.authenticationService.currentUser.subscribe(x => {this.isAdmin = x && x.isAdmin});
      }
 
     ngOnInit() {
@@ -121,5 +126,20 @@ export class PhotosComponent implements OnInit {
 
     handleCancel(){
         this.selectedPhoto = null
+    }
+
+    @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    // console.log(event);
+      if (event.key == 'q' && event.ctrlKey)
+        this.editMode = !this.editMode
+    }
+
+    edit(photo){
+        this.router.navigate(['./addphoto'],{
+            relativeTo: this.activatedRoute,
+            queryParams: {
+            id: photo.id
+        }})
     }
 }

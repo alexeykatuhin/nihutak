@@ -30,12 +30,23 @@ namespace AuthTest.API.Config
                 .ForMember(x=>x.Date, y => y.MapFrom(z=>z.CreatedDt.ToShortDateString()));
 
             CreateMap<Tag, SimpleDto>();
+            CreateMap<SimpleDto, Tag>();
 
             CreateMap<Country, CoutryCitiesDto>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => z.Id))
                 .ForMember(x => x.Name, y => y.MapFrom(z => z.Name))
                 .ForMember(x => x.Code, y => y.MapFrom(z => z.Code))
                 .ForMember(x => x.Cities, y => y.MapFrom(z => z.Cities.Select(i => new SimpleDto { Id = i.Id, Name = i.Name }).OrderBy(i=>i.Name).ToList()));
+
+            CreateMap<PhotoDto, Photo>()
+                .ForMember(x => x.Url, y => y.MapFrom(z => z.Url))
+                .ForMember(x => x.CreatedDt, y => y.MapFrom(z => DateTime.Parse(z.Date)))
+                .ForMember(x => x.CityId, y => y.MapFrom(z => z.City.Id))
+                .ForMember(x => x.City, y => y.Ignore());
+            ;
+
+
+
         }
     }
 }

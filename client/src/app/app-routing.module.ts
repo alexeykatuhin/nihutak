@@ -6,16 +6,19 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { ConfirmEmailComponent } from './components/auth/confirm-email/confirm-email.component';
 import { ResetPasswordComponent } from './components/auth/reset-password/reset-password.component';
 import { ResetConfirmComponent } from './components/auth/reset-confirm/reset-confirm.component';
+import { TestComponent } from './components/test/test.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'teacher', pathMatch:'full' },
+    { path: '', redirectTo: 'home', pathMatch:'full' },
     { path: 'login', component: LoginComponent },
+    { path: 'test', component: TestComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'confirmemail', component: ConfirmEmailComponent },
     { path: 'resetpassword', component: ResetPasswordComponent },
     { path: 'resetconfirm', component: ResetConfirmComponent },
     { path: 'home', loadChildren: () => import('./modules/nihutak/nihutak.module').then(m=>m.NihutakModule)},
-    { path: 'teacher', loadChildren: () => import('./modules/teacher/teacher.module').then(m=>m.TeacherModule)},
+    // { path: 'teacher', loadChildren: () => import('./modules/teacher/teacher.module').then(m=>m.TeacherModule)},
+    
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];

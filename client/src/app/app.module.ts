@@ -31,6 +31,7 @@ import { environment } from '../environments/environment';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { AuthenticationService } from './_services/authentication.service';
 import { CookieService } from 'ngx-cookie-service';
+import { TestComponent } from './components/test/test.component';
 
 registerLocaleData(en);
 export function HttpLoaderFactory(http: HttpClient) {
@@ -78,7 +79,8 @@ export function provideConfig()
         RegisterComponent,
         ConfirmEmailComponent,
         ResetConfirmComponent,
-        ResetPasswordComponent
+        ResetPasswordComponent,
+        TestComponent
     ],
     providers: [
         AuthenticationService,

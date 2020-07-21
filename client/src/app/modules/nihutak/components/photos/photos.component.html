@@ -32,6 +32,7 @@
 <nz-card   nzHoverable style="width:240px" [nzCover]="coverTemplate" >
   </nz-card>
   <ng-template #coverTemplate>
+    <a (click)="edit(photo)" *ngIf="isAdmin && editMode">Edit</a>
     <img (click)="selectedPhoto = photo" alt="example" [src]="photo.url" />
     <div class="desc-wrapper">
     <div class="tags">
